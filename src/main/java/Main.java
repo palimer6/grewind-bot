@@ -6,6 +6,9 @@ import org.jetbrains.annotations.NotNull;
 import sensitiveinfo.ApiKeys;
 
 import javax.security.auth.login.LoginException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Main extends ListenerAdapter {
     public static void main(String[] args) throws LoginException {
@@ -25,11 +28,18 @@ public class Main extends ListenerAdapter {
         }
         String rawCommand = event.getMessage().getContentRaw();
         String commandContent = rawCommand.replaceFirst("!", "");
+        List<String> commandParts = Arrays.stream(commandContent.split("\\s"))
+                .filter(s -> !s.equals(""))
+                .collect(Collectors.toList());
+        String commandSubContent = commandContent.replaceFirst(commandParts.get(0) + "\\s", "");
         System.out.printf("command from %#s: %s%n",
                 event.getAuthor(),
                 rawCommand);
-        if (commandContent.equals("ping")) {
+        if (commandParts.get(0).equals("ping")) {
             sendMessage(event, "Pong!");
+        }
+        if (commandParts.get(0).equals("say")) {
+            sendMessage(event, commandSubContent);
         }
     }
 
