@@ -20,7 +20,7 @@ public class Main extends ListenerAdapter {
     public static void main(String[] args) throws LoginException {
         JDABuilder builder = new JDABuilder(AccountType.BOT)
                 .setToken(ApiKeys.TOKEN)
-                .setGame(Game.watching("type !help for commands"))
+                .setGame(Game.watching("I can't !help you yet. Pali is too lazy because STUPID INTELLIJ DOESN'T WANT TO HAVE BLOCK STRINGS WORK YET"))
                 .addEventListener(new Main());
         builder.buildAsync();
     }
@@ -95,13 +95,13 @@ public class Main extends ListenerAdapter {
         }
         String fromZone = commandModifiers.get(0);
         int time;
-        Matcher matcher = Pattern.compile("(-?\\d+)([PpAa][Mm]?)?").matcher(commandModifiers.get(1));
+        Matcher matcher = Pattern.compile("(-?\\d+)([PpAa])?[Mm]?").matcher(commandModifiers.get(1));
         if (matcher.find()) {
             time = Integer.parseInt(matcher.group(1));
             if (matcher.group(2) != null) {
                 time = switch (matcher.group(2)) {
-                    case "AM" -> mod(time, 12);
-                    case "PM" -> mod(time, 12) + 12;
+                    case "A", "a" -> mod(time, 12);
+                    case "P", "p" -> mod(time, 12) + 12;
                     default -> time;
                 };
             }
