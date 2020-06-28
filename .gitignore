@@ -1,4 +1,4 @@
 /.gradle/
-/src/main/java/sensitiveinfo/*
 /build/
-/out/*
+/out/
+/src/main/java/net/grewind/palimer/bot/sensitiveinfo/

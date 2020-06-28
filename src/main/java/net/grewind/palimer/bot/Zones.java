@@ -1,3 +1,5 @@
+package net.grewind.palimer.bot;
+
 import java.util.*;
 
 public class Zones {
