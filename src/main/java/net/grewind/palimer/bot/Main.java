@@ -8,6 +8,7 @@ import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.core.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import net.dv8tion.jda.core.requests.restaction.MessageAction;
 import net.grewind.palimer.bot.sensitiveinfo.ApiKeys;
@@ -105,7 +106,11 @@ public class Main extends ListenerAdapter {
 
     private boolean say(@NotNull MessageReceivedEvent event, String text) {
         if (event.getChannelType() == ChannelType.TEXT) {
-            event.getMessage().delete().queue();
+            try {
+                event.getMessage().delete().queue();
+            } catch (InsufficientPermissionException e) {
+                System.err.println("Permission to manage messages not given.");
+            }
         }
         sendMessage(event.getChannel(),
                 text,
