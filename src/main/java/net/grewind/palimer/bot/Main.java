@@ -15,13 +15,10 @@ import net.grewind.palimer.bot.sensitiveinfo.ApiKeys;
 import org.jetbrains.annotations.NotNull;
 
 import javax.security.auth.login.LoginException;
-import java.awt.Color;
+import java.awt.*;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.regex.Matcher;
@@ -84,7 +81,7 @@ public class Main extends ListenerAdapter {
             case "botinfo" -> commandRecognized = botInfo(event);
             case "convert" -> commandRecognized = convert(event, commandModifiers);
             case "help" -> commandRecognized = help(event, commandModifiers);
-            default -> System.out.printf("invalid comment: !%s", commandRoot);
+            default -> System.out.printf("invalid comment: !%s%n", commandRoot);
         }
         if (!commandRecognized) {
             parseCommand(event, String.format("!help %s", commandRoot));
