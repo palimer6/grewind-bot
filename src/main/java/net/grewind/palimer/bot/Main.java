@@ -133,23 +133,24 @@ public class Main extends ListenerAdapter {
         Unit<?> from;
         Unit<?> to;
         UnitConverter converter;
-        if (TEMP_MAP.containsKey(fromStr) && TEMP_MAP.containsKey(toStr)) {
-            fromStr = TEMP_MAP.get(fromStr);
-            toStr = TEMP_MAP.get(toStr);
-        }
         double oldVal;
         double newVal;
-        try {
-            from = format.parseProductUnit(fromStr, new ParsePosition(0));
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return false;
-        }
-        try {
-            to = format.parseProductUnit(toStr, new ParsePosition(0));
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return false;
+        if (TEMP_MAP.keySet().containsAll(Arrays.asList(fromStr, toStr))) {
+            from = TEMP_MAP.get(fromStr).getKey().apply(TEMP_MAP.get(fromStr).getValue());
+            to = TEMP_MAP.get(toStr).getKey().apply(TEMP_MAP.get(toStr).getValue());
+        } else {
+            try {
+                from = format.parseProductUnit(fromStr, new ParsePosition(0));
+            } catch (ParseException e) {
+                e.printStackTrace();
+                return false;
+            }
+            try {
+                to = format.parseProductUnit(toStr, new ParsePosition(0));
+            } catch (ParseException e) {
+                e.printStackTrace();
+                return false;
+            }
         }
         try {
             converter = from.getConverterTo(to);
@@ -169,7 +170,7 @@ public class Main extends ListenerAdapter {
             e.printStackTrace();
             return false;
         }
-        String message = String.format("%s%s is %s%s", oldVal, from, newVal, to);
+        String message = String.format("%s%s is %s%s", oldVal, from, (float) newVal, to).replaceAll("℃","°C");
         sendMessage(event.getChannel(),
                 message,
                 s -> event.getChannel().sendMessage(s));

@@ -67,11 +67,11 @@ public class Help {
                     "\tAt least for the user side.\n" +
                     "\tI'm not sure if I'll ever put real documentation here, cause it's just SO MANY UNITS.\n" +
                     "\tFeel free to try your best to grasp the javadoc:\n" +
-                    "\thttps://javadoc.io/doc/org.jscience/jscience/latest/javax/measure/unit/SI.html\n" +
+                    "\thttps://javadoc.io/static/org.jscience/jscience/4.3.1/javax/measure/unit/SI.html\n" +
                     "\thttps://javadoc.io/static/org.jscience/jscience/4.3.1/javax/measure/unit/NonSI.html\n" +
                     "\tI also added some QoL improvements, like you can use C and F for Celsius and Fahrenheit\n" +
                     "\tand the units and prefixes that use Non-ASCII characters have ASCII alternatives\n" +
-                    "\t\t(e.g. Å -> Angstrom, µ -> micro)\n" +
+                    "\t\t(e.g. \u00c5 -> Angstrom, \u00b5 -> micro)\n" +
                     "\tYou can also use operators to make product units\n" +
                     "\t\t(e.g. m/s, mi^2, N*m, (m*kg)/s^2)\n" +
                     "\tThis library can do a lot, but man it might be too much lol.\n\n" +
