@@ -57,11 +57,26 @@ public class Help {
                     "\t\tUTC\u00b100:\tGMT\n" +
                     "\t\tUTC+01:\tCET\n";
     public static final String CONVERT_COMMAND =
-            "\n!convert\n";
+            "\n!convert [fromUnit] [toUnit] [value]\n";
     public static final String CONVERT_BASIC =
-            "\tComing soon\u2122\n";
+            "\tIN BETA\u2122\n" +
+                    "\t!convert help for more infos.\n";
     public static final String CONVERT_VERBOSE =
-            "\tThis one will be the most work, ok? Give me time.\n";
+            "\tOk, here's the thing.\n" +
+                    "\tI imported a full library that has kiiind of shitty documentation.\n" +
+                    "\tAt least for the user side.\n" +
+                    "\tI'm not sure if I'll ever put real documentation here, cause it's just SO MANY UNITS.\n" +
+                    "\tFeel free to try your best to grasp the javadoc:\n" +
+                    "\thttps://javadoc.io/doc/org.jscience/jscience/latest/javax/measure/unit/SI.html\n" +
+                    "\thttps://javadoc.io/static/org.jscience/jscience/4.3.1/javax/measure/unit/NonSI.html\n" +
+                    "\tI also added some QoL improvements, like you can use C and F for Celsius and Fahrenheit\n" +
+                    "\tand the units and prefixes that use Non-ASCII characters have ASCII alternatives\n" +
+                    "\t\t(e.g. Å -> Angstrom, µ -> micro)\n" +
+                    "\tYou can also use operators to make product units\n" +
+                    "\t\t(e.g. m/s, mi^2, N*m, (m*kg)/s^2)\n" +
+                    "\tThis library can do a lot, but man it might be too much lol.\n\n" +
+                    "\tOh yeah. Currency probably still not happening anytime soon.\n" +
+                    "\tThat would require live APIs that would either cost money or have a pretty low rate limit.\n";
 
 
 }

@@ -14,8 +14,14 @@ import net.dv8tion.jda.core.requests.restaction.MessageAction;
 import net.grewind.palimer.bot.sensitiveinfo.ApiKeys;
 import org.jetbrains.annotations.NotNull;
 
+import javax.measure.converter.ConversionException;
+import javax.measure.converter.UnitConverter;
+import javax.measure.unit.Unit;
+import javax.measure.unit.UnitFormat;
 import javax.security.auth.login.LoginException;
 import java.awt.*;
+import java.text.ParseException;
+import java.text.ParsePosition;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.*;
@@ -26,6 +32,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static net.grewind.palimer.bot.Help.*;
+import static net.grewind.palimer.bot.TempMap.TEMP_MAP;
 
 public class Main extends ListenerAdapter {
     private static User grewindBot;
@@ -115,8 +122,58 @@ public class Main extends ListenerAdapter {
         return true;
     }
 
-    private boolean convert(MessageReceivedEvent event, List<String> commandModifiers) {
-        return false;
+    private boolean convert(MessageReceivedEvent event, @NotNull List<String> commandModifiers) {
+        if (commandModifiers.size() < 3) {
+            return false;
+        }
+        UnitFormat format = UnitFormat.getUCUMInstance();
+        String fromStr = commandModifiers.get(0);
+        String toStr = commandModifiers.get(1);
+        String valStr = commandModifiers.get(2);
+        Unit<?> from;
+        Unit<?> to;
+        UnitConverter converter;
+        if (TEMP_MAP.containsKey(fromStr) && TEMP_MAP.containsKey(toStr)) {
+            fromStr = TEMP_MAP.get(fromStr);
+            toStr = TEMP_MAP.get(toStr);
+        }
+        double oldVal;
+        double newVal;
+        try {
+            from = format.parseProductUnit(fromStr, new ParsePosition(0));
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return false;
+        }
+        try {
+            to = format.parseProductUnit(toStr, new ParsePosition(0));
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return false;
+        }
+        try {
+            converter = from.getConverterTo(to);
+        } catch (ConversionException e) {
+            e.printStackTrace();
+            return false;
+        }
+        try {
+            oldVal = Double.parseDouble(valStr);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            return false;
+        }
+        try {
+            newVal = converter.convert(oldVal);
+        } catch (ConversionException e) {
+            e.printStackTrace();
+            return false;
+        }
+        String message = String.format("%s%s is %s%s", oldVal, from, newVal, to);
+        sendMessage(event.getChannel(),
+                message,
+                s -> event.getChannel().sendMessage(s));
+        return true;
     }
 
     private boolean timezones(MessageReceivedEvent event, @NotNull List<String> commandModifiers) {
@@ -228,6 +285,7 @@ public class Main extends ListenerAdapter {
                 case "ping" -> stringBuilder.append(PING_COMMAND).append(PING_BASIC).append(PING_VERBOSE);
                 case "say" -> stringBuilder.append(SAY_COMMAND).append(SAY_BASIC).append(SAY_VERBOSE);
                 case "timezones" -> stringBuilder.append(TIMEZONES_COMMAND).append(TIMEZONES_BASIC).append(TIMEZONES_VERBOSE);
+                // TODO: add convert help?
                 case "convert" -> stringBuilder.append(CONVERT_COMMAND).append(CONVERT_BASIC).append(CONVERT_VERBOSE);
                 default -> {
                     return false;
