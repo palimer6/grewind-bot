@@ -68,7 +68,7 @@ public class Main extends ListenerAdapter {
             logTimer.schedule(new LogTimerTask(), LOG_DELAY, LOG_PERIOD);
         } else {
             new Thread(() -> MESSAGE_LIST_HANDLER.syncedFunction(event.getMessage(),
-                    MESSAGE_LIST_HANDLER.MESSAGE_LIST::add));
+                    MESSAGE_LIST_HANDLER.MESSAGE_LIST::add)).start();
         }
     }
 

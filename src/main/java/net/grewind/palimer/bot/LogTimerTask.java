@@ -83,5 +83,6 @@ public class LogTimerTask extends TimerTask {
                 });
             }
         };
+        thread.start();
     }
 }
