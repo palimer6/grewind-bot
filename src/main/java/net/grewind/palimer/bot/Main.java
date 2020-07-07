@@ -3,10 +3,7 @@ package net.grewind.palimer.bot;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.JDABuilder;
-import net.dv8tion.jda.core.entities.ChannelType;
-import net.dv8tion.jda.core.entities.Game;
-import net.dv8tion.jda.core.entities.MessageChannel;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
@@ -37,6 +34,10 @@ import static net.grewind.palimer.bot.TempMap.TEMP_MAP;
 public class Main extends ListenerAdapter {
     private static User grewindBot;
     private static long startDate;
+    public static final ListHandler<Message> MESSAGE_LIST_HANDLER = new ListHandler<>();
+    private static final long LOG_DELAY = TimeUnit.MILLISECONDS.toMillis(0);
+    private static final long LOG_PERIOD = TimeUnit.HOURS.toMillis(1);
+    private static Timer logTimer = null;
 
     public static void main(String[] args) {
         JDABuilder builder = new JDABuilder(AccountType.BOT)
@@ -60,6 +61,15 @@ public class Main extends ListenerAdapter {
             return;
         }
         parseCommand(event);
+        if (logTimer == null) {
+            MESSAGE_LIST_HANDLER.syncedFunction(event.getMessage(),
+                    MESSAGE_LIST_HANDLER.MESSAGE_LIST::add);
+            logTimer = new Timer();
+            logTimer.schedule(new LogTimerTask(), LOG_DELAY, LOG_PERIOD);
+        } else {
+            new Thread(() -> MESSAGE_LIST_HANDLER.syncedFunction(event.getMessage(),
+                    MESSAGE_LIST_HANDLER.MESSAGE_LIST::add));
+        }
     }
 
     private void parseCommand(MessageReceivedEvent event, @NotNull String rawCommand) {
@@ -170,7 +180,7 @@ public class Main extends ListenerAdapter {
             e.printStackTrace();
             return false;
         }
-        String message = String.format("%s%s is %s%s", oldVal, from, (float) newVal, to).replaceAll("℃","°C");
+        String message = String.format("%s%s is %s%s", oldVal, from, (float) newVal, to).replaceAll("℃", "°C");
         sendMessage(event.getChannel(),
                 message,
                 s -> event.getChannel().sendMessage(s));
