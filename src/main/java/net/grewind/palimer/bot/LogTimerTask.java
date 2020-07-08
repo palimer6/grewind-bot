@@ -27,7 +27,7 @@ public class LogTimerTask extends TimerTask {
                     JsonArray logsJson;
                     if (Files.notExists(LOG_PATH)) {
                         try {
-                            Files.createDirectory(LOG_PATH);
+                            Files.createDirectories(LOG_PATH.getParent());
                         } catch (IOException e) {
                             e.printStackTrace();
                             return;
