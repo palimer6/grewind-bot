@@ -32,6 +32,7 @@ import static net.grewind.palimer.bot.Help.*;
 import static net.grewind.palimer.bot.TempMap.TEMP_MAP;
 
 public class Main extends ListenerAdapter {
+    private static long botId;
     private static User grewindBot;
     private static long startDate;
     public static final ListHandler<Message> MESSAGE_LIST_HANDLER = new ListHandler<>();
@@ -46,6 +47,7 @@ public class Main extends ListenerAdapter {
                 .addEventListener(new Main());
         try {
             grewindBot = builder.buildBlocking().getSelfUser();
+            botId = grewindBot.getIdLong();
             startDate = System.currentTimeMillis();
         } catch (InterruptedException | LoginException e) {
             e.printStackTrace();
@@ -324,8 +326,7 @@ public class Main extends ListenerAdapter {
 
     private boolean botCheck(@NotNull MessageReceivedEvent event) {
         boolean isBot = event.getAuthor().isBot();
-        if (!event.getAuthor().equals(grewindBot)
-                && isBot) {
+        if (event.getAuthor().getIdLong() != botId && isBot) {
             System.err.printf("command from bot %#s: %s%n",
                     event.getAuthor(),
                     event.getMessage().getContentRaw());
