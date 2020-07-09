@@ -1,19 +1,21 @@
 package net.grewind.palimer.bot;
 
-import net.dv8tion.jda.core.AccountType;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.JDABuilder;
-import net.dv8tion.jda.core.entities.ChannelType;
-import net.dv8tion.jda.core.entities.Game;
-import net.dv8tion.jda.core.entities.MessageChannel;
-import net.dv8tion.jda.core.entities.User;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.core.exceptions.InsufficientPermissionException;
-import net.dv8tion.jda.core.hooks.ListenerAdapter;
-import net.dv8tion.jda.core.requests.restaction.MessageAction;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.ChannelType;
+import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.events.ReadyEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import net.grewind.palimer.bot.sensitiveinfo.ApiKeys;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nonnull;
 import javax.measure.converter.ConversionException;
 import javax.measure.converter.UnitConverter;
 import javax.measure.unit.Unit;
@@ -34,21 +36,28 @@ import java.util.stream.Collectors;
 import static net.grewind.palimer.bot.Help.*;
 import static net.grewind.palimer.bot.TempMap.TEMP_MAP;
 
-public class Main extends ListenerAdapter {
+public class Bot extends ListenerAdapter {
     private static User grewindBot;
+    private static long botId;
     private static long startDate;
 
     public static void main(String[] args) {
-        JDABuilder builder = new JDABuilder(AccountType.BOT)
-                .setToken(ApiKeys.TOKEN)
-                .setGame(Game.watching("type !help for commands"))
-                .addEventListener(new Main());
+        JDABuilder jdaBuilder = JDABuilder.create((String) ApiKeys.TOKEN,
+                GatewayIntent.GUILD_MESSAGES, GatewayIntent.DIRECT_MESSAGES)
+                .setActivity(Activity.of(Activity.ActivityType.CUSTOM_STATUS, "type !help for commands"))
+                .addEventListeners(new Bot());
         try {
-            grewindBot = builder.buildBlocking().getSelfUser();
-            startDate = System.currentTimeMillis();
-        } catch (InterruptedException | LoginException e) {
+            jdaBuilder.build();
+        } catch (LoginException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onReady(@Nonnull ReadyEvent event) {
+        startDate = System.currentTimeMillis();
+        grewindBot = event.getJDA().getSelfUser();
+        botId = grewindBot.getIdLong();
     }
 
     @Override
@@ -170,7 +179,7 @@ public class Main extends ListenerAdapter {
             e.printStackTrace();
             return false;
         }
-        String message = String.format("%s%s is %s%s", oldVal, from, (float) newVal, to).replaceAll("℃","°C");
+        String message = String.format("%s%s is %s%s", oldVal, from, (float) newVal, to).replaceAll("℃", "°C");
         sendMessage(event.getChannel(),
                 message,
                 s -> event.getChannel().sendMessage(s));
@@ -246,7 +255,7 @@ public class Main extends ListenerAdapter {
 
     private boolean botInfo(@NotNull MessageReceivedEvent event) {
         long startTime = System.currentTimeMillis() - startDate;
-        LocalDateTime creationTime = grewindBot.getCreationTime().toLocalDateTime();
+        LocalDateTime creationTime = grewindBot.getTimeCreated().toLocalDateTime();
         EmbedBuilder embedBuilder = new EmbedBuilder()
                 .setDescription("Bot Information")
                 .setColor(new Color(0xeb8c3f))
@@ -314,8 +323,7 @@ public class Main extends ListenerAdapter {
 
     private boolean botCheck(@NotNull MessageReceivedEvent event) {
         boolean isBot = event.getAuthor().isBot();
-        if (!event.getAuthor().equals(grewindBot)
-                && isBot) {
+        if (!event.getAuthor().equals(grewindBot) && isBot) {
             System.err.printf("command from bot %#s: %s%n",
                     event.getAuthor(),
                     event.getMessage().getContentRaw());
