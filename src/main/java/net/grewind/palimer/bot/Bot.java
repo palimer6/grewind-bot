@@ -10,7 +10,7 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.grewind.palimer.bot.commands.Command;
 import net.grewind.palimer.bot.commands.CommandVisitor;
 import net.grewind.palimer.bot.commands.Help;
-import net.grewind.palimer.bot.sensitiveinfo.ApiKeys;
+import net.grewind.palimer.bot.sensitiveinfo.SecretStuff;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
@@ -21,7 +21,8 @@ public class Bot {
     public static long startDate;
 
     public static void main(String[] args) {
-        JDABuilder jdaBuilder = JDABuilder.create((String) ApiKeys.TOKEN,
+        @SuppressWarnings("RedundantCast")
+        JDABuilder jdaBuilder = JDABuilder.create((String) SecretStuff.TOKEN,
                 GatewayIntent.GUILD_MESSAGES, GatewayIntent.DIRECT_MESSAGES)
                 .setActivity(Activity.of(Activity.ActivityType.CUSTOM_STATUS,
                         String.format("type %s%s for commands", Command.SOIL, Help.ROOT)))
