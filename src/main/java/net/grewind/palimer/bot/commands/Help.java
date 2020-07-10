@@ -74,7 +74,7 @@ public class Help extends CommandExecutor {
 
     public static class ForHelp implements Text<Help> {
 
-        public static ForHelp INSTANCE = new ForHelp();
+        public static final ForHelp INSTANCE = new ForHelp();
 
         @Override
         public @NotNull Class<Help> getExecutor() {
@@ -101,7 +101,7 @@ public class Help extends CommandExecutor {
 
     public static class ForBotinfo implements Text<Botinfo> {
 
-        public static ForBotinfo INSTANCE = new ForBotinfo();
+        public static final ForBotinfo INSTANCE = new ForBotinfo();
 
         @Override
         public @NotNull Class<Botinfo> getExecutor() {
@@ -130,7 +130,7 @@ public class Help extends CommandExecutor {
 
     public static class ForPing implements Text<Ping> {
 
-        public static ForPing INSTANCE = new ForPing();
+        public static final ForPing INSTANCE = new ForPing();
 
         @Override
         public @NotNull Class<Ping> getExecutor() {
@@ -155,7 +155,7 @@ public class Help extends CommandExecutor {
 
     public static class ForSay implements Text<Say> {
 
-        public static ForSay INSTANCE = new ForSay();
+        public static final ForSay INSTANCE = new ForSay();
 
         @Override
         public @NotNull Class<Say> getExecutor() {
@@ -182,7 +182,7 @@ public class Help extends CommandExecutor {
 
     public static class ForTimezones implements Text<Timezones> {
 
-        public static ForTimezones INSTANCE = new ForTimezones();
+        public static final ForTimezones INSTANCE = new ForTimezones();
 
         @Override
         public @NotNull Class<Timezones> getExecutor() {
@@ -218,7 +218,7 @@ public class Help extends CommandExecutor {
 
     public static class ForConvert implements Text<Convert> {
 
-        public static ForConvert INSTANCE = new ForConvert();
+        public static final ForConvert INSTANCE = new ForConvert();
 
         @Override
         public @NotNull Class<Convert> getExecutor() {
@@ -233,7 +233,7 @@ public class Help extends CommandExecutor {
         @Override
         public @NotNull String getBasic() {
             return "\tIN BETA\u2122\n" +
-                    "\t!convert help for more infos.\n";
+                    "\t!convert help for more info.\n";
         }
 
         @Override

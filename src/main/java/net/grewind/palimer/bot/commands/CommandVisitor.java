@@ -4,6 +4,7 @@ import net.dv8tion.jda.api.entities.Message;
 import org.jetbrains.annotations.NotNull;
 
 public class CommandVisitor {
+    @SuppressWarnings("DuplicateBranchesInSwitch")
     public static CommandExecutor visit(@NotNull Message message, @NotNull Command command) {
         String root = command.getRoot();
         System.out.printf("command from %#s in %s channel %#s: %s%n",
