@@ -1,4 +1,4 @@
-package net.grewind.palimer.bot;
+package net.grewind.palimer.bot.utils;
 
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;

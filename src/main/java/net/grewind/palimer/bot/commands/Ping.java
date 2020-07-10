@@ -1,7 +1,7 @@
 package net.grewind.palimer.bot.commands;
 
 import net.dv8tion.jda.api.entities.Message;
-import net.grewind.palimer.bot.Sender;
+import net.grewind.palimer.bot.utils.Sender;
 
 import java.util.Random;
 

@@ -1,12 +1,16 @@
 package net.grewind.palimer.bot.commands;
 
 import net.dv8tion.jda.api.entities.Message;
-import net.grewind.palimer.bot.Sender;
-import net.grewind.palimer.bot.Zones;
+import net.grewind.palimer.bot.utils.Sender;
 
+import java.util.AbstractMap;
 import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static net.grewind.palimer.bot.commands.Timezones.Zones.ZONES_MAP;
 
 public class Timezones extends CommandExecutor {
     public static final String ROOT = "timezones";
@@ -37,7 +41,7 @@ public class Timezones extends CommandExecutor {
             return false;
         }
         int fromUtcOffset = Integer.MAX_VALUE;
-        for (Map.Entry<String, Integer> zone : Zones.ZONES_MAP) {
+        for (Map.Entry<String, Integer> zone : ZONES_MAP) {
             if (fromZone.matches(zone.getKey())) {
                 fromUtcOffset = zone.getValue();
             }
@@ -48,7 +52,7 @@ public class Timezones extends CommandExecutor {
         if (modifierCount > 2) {
             String toZone = command.getCrownBranches()[2];
             int toUtcOffset = Integer.MAX_VALUE;
-            for (Map.Entry<String, Integer> zone : Zones.ZONES_MAP) {
+            for (Map.Entry<String, Integer> zone : ZONES_MAP) {
                 if (toZone.matches(zone.getKey())) {
                     toUtcOffset = zone.getValue();
                 }
@@ -64,7 +68,7 @@ public class Timezones extends CommandExecutor {
                     s -> message.getChannel().sendMessage(s));
         } else {
             StringBuilder stringBuilder = new StringBuilder();
-            for (Map.Entry<String, Integer> zone : Zones.ZONES_MAP) {
+            for (Map.Entry<String, Integer> zone : ZONES_MAP) {
                 if (!zone.getKey().matches(".*\\d.*")) {
                     int finalTime = calculateTime(time, fromUtcOffset, zone.getValue());
                     stringBuilder.append(String.format("%s: %d\n",
@@ -89,5 +93,54 @@ public class Timezones extends CommandExecutor {
 
     private int calculateTime(int time, int fromUtcOffset, int toUtcOffset) {
         return time - fromUtcOffset + toUtcOffset;
+    }
+
+    public static class Zones {
+        public static final SortedSet<Map.Entry<String, Integer>> ZONES_MAP =
+                new TreeSet<>((o1, o2) -> {
+                    int compareVal = Integer.compare(o1.getValue(), o2.getValue());
+                    if (compareVal == 0) {
+                        return o1.getKey().compareTo(o2.getKey());
+                    } else {
+                        return compareVal;
+                    }
+                });
+
+        static {
+            ZONES_MAP.add(new AbstractMap.SimpleEntry<>("-0*12", -12));
+            ZONES_MAP.add(new AbstractMap.SimpleEntry<>("-0*11", -11));
+            ZONES_MAP.add(new AbstractMap.SimpleEntry<>("-0*10", -10));
+            ZONES_MAP.add(new AbstractMap.SimpleEntry<>("-0*9", -9));
+            ZONES_MAP.add(new AbstractMap.SimpleEntry<>("-0*8", -8));
+            ZONES_MAP.add(new AbstractMap.SimpleEntry<>("PST", -8));
+            ZONES_MAP.add(new AbstractMap.SimpleEntry<>("-0*7", -7));
+            ZONES_MAP.add(new AbstractMap.SimpleEntry<>("MST", -7));
+            ZONES_MAP.add(new AbstractMap.SimpleEntry<>("-0*6", -6));
+            ZONES_MAP.add(new AbstractMap.SimpleEntry<>("CST", -6));
+            ZONES_MAP.add(new AbstractMap.SimpleEntry<>("-0*5", -5));
+            ZONES_MAP.add(new AbstractMap.SimpleEntry<>("EST", -5));
+            ZONES_MAP.add(new AbstractMap.SimpleEntry<>("-0*4", -4));
+            ZONES_MAP.add(new AbstractMap.SimpleEntry<>("-0*3", -3));
+            ZONES_MAP.add(new AbstractMap.SimpleEntry<>("-0*2", -2));
+            ZONES_MAP.add(new AbstractMap.SimpleEntry<>("-0*1", -1));
+            ZONES_MAP.add(new AbstractMap.SimpleEntry<>("GMT", 0));
+            ZONES_MAP.add(new AbstractMap.SimpleEntry<>("[\\+-±]0+", 0));
+            ZONES_MAP.add(new AbstractMap.SimpleEntry<>("CET", 1));
+            ZONES_MAP.add(new AbstractMap.SimpleEntry<>("\\+0*1", 1));
+            ZONES_MAP.add(new AbstractMap.SimpleEntry<>("\\+0*2", 2));
+            ZONES_MAP.add(new AbstractMap.SimpleEntry<>("\\+0*3", 3));
+            ZONES_MAP.add(new AbstractMap.SimpleEntry<>("\\+0*4", 4));
+            ZONES_MAP.add(new AbstractMap.SimpleEntry<>("\\+0*5", 5));
+            ZONES_MAP.add(new AbstractMap.SimpleEntry<>("\\+0*6", 6));
+            ZONES_MAP.add(new AbstractMap.SimpleEntry<>("\\+0*7", 7));
+            ZONES_MAP.add(new AbstractMap.SimpleEntry<>("\\+0*8", 8));
+            ZONES_MAP.add(new AbstractMap.SimpleEntry<>("\\+0*9", 9));
+            ZONES_MAP.add(new AbstractMap.SimpleEntry<>("\\+0*10", 10));
+            ZONES_MAP.add(new AbstractMap.SimpleEntry<>("\\+0*11", 11));
+            ZONES_MAP.add(new AbstractMap.SimpleEntry<>("\\+0*12", 12));
+            ZONES_MAP.add(new AbstractMap.SimpleEntry<>("\\+0*13", 13));
+            ZONES_MAP.add(new AbstractMap.SimpleEntry<>("\\+0*14", 14));
+
+        }
     }
 }

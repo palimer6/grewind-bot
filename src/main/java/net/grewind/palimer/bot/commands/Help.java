@@ -2,7 +2,7 @@ package net.grewind.palimer.bot.commands;
 
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
-import net.grewind.palimer.bot.Sender;
+import net.grewind.palimer.bot.utils.Sender;
 import org.jetbrains.annotations.NotNull;
 
 public class Help extends CommandExecutor {

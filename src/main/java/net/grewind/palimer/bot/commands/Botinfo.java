@@ -4,7 +4,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.SelfUser;
 import net.grewind.palimer.bot.Bot;
-import net.grewind.palimer.bot.Sender;
+import net.grewind.palimer.bot.utils.Sender;
 
 import java.awt.*;
 import java.time.LocalDateTime;

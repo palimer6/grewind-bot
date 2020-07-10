@@ -3,7 +3,7 @@ package net.grewind.palimer.bot.commands;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
-import net.grewind.palimer.bot.Sender;
+import net.grewind.palimer.bot.utils.Sender;
 
 public class Say extends CommandExecutor {
     public static final String ROOT = "say";
