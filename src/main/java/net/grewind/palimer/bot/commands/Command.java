@@ -19,7 +19,7 @@ public class Command {
     public Command(@NotNull String raw) {
         this.tree = raw.matches(SOIL + ".*") ? raw.substring(SOIL.length()) : raw;
         this.branches = Arrays.stream(this.tree.split("\\s"))
-                .filter(String::isBlank)
+                .filter(s -> !s.isBlank())
                 .toArray(String[]::new);
         this.root = this.branches[0];
         this.crown = this.tree.replaceFirst(this.root + "\\s*", "");

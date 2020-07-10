@@ -24,7 +24,7 @@ public class Bot {
         @SuppressWarnings("RedundantCast")
         JDABuilder jdaBuilder = JDABuilder.create((String) SecretStuff.TOKEN,
                 GatewayIntent.GUILD_MESSAGES, GatewayIntent.DIRECT_MESSAGES)
-                .setActivity(Activity.of(Activity.ActivityType.CUSTOM_STATUS,
+                .setActivity(Activity.of(Activity.ActivityType.DEFAULT,
                         String.format("type %s%s for commands", Command.SOIL, Help.ROOT)))
                 .addEventListeners(new Bot.Listeners());
         try {
