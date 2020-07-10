@@ -4,8 +4,13 @@ import net.dv8tion.jda.api.entities.Message;
 import org.jetbrains.annotations.NotNull;
 
 public class CommandVisitor {
-    public static CommandExecutor visit(Message message, @NotNull Command command) {
+    public static CommandExecutor visit(@NotNull Message message, @NotNull Command command) {
         String root = command.getRoot();
+        System.out.printf("command from %#s in %s channel %#s: %s%n",
+                message.getAuthor(),
+                message.getChannelType(),
+                message.getChannel(),
+                command.getTree());
         return switch (root) {
             case Botinfo.ROOT -> new Botinfo(message, command);
             case Convert.ROOT -> new Convert(message, command);
