@@ -12,6 +12,7 @@ public class Help extends CommandExecutor {
                     "The brackets {}[] are not to be used in the final command.\n" +
                     "Square brackets [] indicate a REQUIRED modifier.\n" +
                     "Curly brackets {} indicate an OPTIONAL modifier.\n";
+    public static final String ROOT = "help";
 
     public Help(Message message, Command command) {
         super(message, command);
