@@ -30,13 +30,13 @@ public class Help extends CommandExecutor {
             stringBuilder.append(ForConvert.INSTANCE.getGeneral());
         } else {
             switch (this.command.getCrownBranches()[0]) {
-                case "help" -> stringBuilder.append(ForHelp.INSTANCE.getSpecific());
-                case "botinfo" -> stringBuilder.append(ForBotinfo.INSTANCE.getSpecific());
-                case "ping" -> stringBuilder.append(ForPing.INSTANCE.getSpecific());
-                case "say" -> stringBuilder.append(ForSay.INSTANCE.getSpecific());
-                case "timezones" -> stringBuilder.append(ForTimezones.INSTANCE.getSpecific());
+                case Help.ROOT -> stringBuilder.append(ForHelp.INSTANCE.getSpecific());
+                case Botinfo.ROOT -> stringBuilder.append(ForBotinfo.INSTANCE.getSpecific());
+                case Ping.ROOT -> stringBuilder.append(ForPing.INSTANCE.getSpecific());
+                case Say.ROOT -> stringBuilder.append(ForSay.INSTANCE.getSpecific());
+                case Timezones.ROOT -> stringBuilder.append(ForTimezones.INSTANCE.getSpecific());
                 // TODO: add convert help?
-                case "convert" -> stringBuilder.append(ForConvert.INSTANCE.getSpecific());
+                case Convert.ROOT -> stringBuilder.append(ForConvert.INSTANCE.getSpecific());
                 default -> {
                     return false;
                 }
