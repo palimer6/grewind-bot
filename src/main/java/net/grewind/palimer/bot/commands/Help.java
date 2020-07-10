@@ -5,7 +5,7 @@ import net.dv8tion.jda.api.entities.MessageChannel;
 import net.grewind.palimer.bot.Sender;
 import org.jetbrains.annotations.NotNull;
 
-public class Help implements CommandExecutor {
+public class Help extends CommandExecutor {
     private static final String CODE_FORMAT = "```%s```";
     private static final String PREEMPT =
             "EVERYTHING IS CASE SENSITIVE\n" +
@@ -13,31 +13,29 @@ public class Help implements CommandExecutor {
                     "Square brackets [] indicate a REQUIRED modifier.\n" +
                     "Curly brackets {} indicate an OPTIONAL modifier.\n";
 
+    public Help(Message message, Command command) {
+        super(message, command);
+    }
+
     @Override
-    public boolean execute(Message message, Command command) {
+    public boolean execute() {
         StringBuilder stringBuilder = new StringBuilder(PREEMPT);
-        ForHelp help = new ForHelp();
-        ForBotinfo botinfo = new ForBotinfo();
-        ForPing ping = new ForPing();
-        ForSay say = new ForSay();
-        ForTimezones timezones = new ForTimezones();
-        ForConvert convert = new ForConvert();
-        if (command.getCrownBranches().length == 0) {
-            stringBuilder.append(help.getGeneral());
-            stringBuilder.append(botinfo.getGeneral());
-            stringBuilder.append(ping.getGeneral());
-            stringBuilder.append(say.getGeneral());
-            stringBuilder.append(timezones.getGeneral());
-            stringBuilder.append(convert.getGeneral());
+        if (this.command.getCrownBranches().length == 0) {
+            stringBuilder.append(ForHelp.INSTANCE.getGeneral());
+            stringBuilder.append(ForBotinfo.INSTANCE.getGeneral());
+            stringBuilder.append(ForPing.INSTANCE.getGeneral());
+            stringBuilder.append(ForSay.INSTANCE.getGeneral());
+            stringBuilder.append(ForTimezones.INSTANCE.getGeneral());
+            stringBuilder.append(ForConvert.INSTANCE.getGeneral());
         } else {
-            switch (command.getCrownBranches()[0]) {
-                case "help" -> stringBuilder.append(help.getSpecific());
-                case "botinfo" -> stringBuilder.append(botinfo.getSpecific());
-                case "ping" -> stringBuilder.append(ping.getSpecific());
-                case "say" -> stringBuilder.append(say.getSpecific());
-                case "timezones" -> stringBuilder.append(timezones.getSpecific());
+            switch (this.command.getCrownBranches()[0]) {
+                case "help" -> stringBuilder.append(ForHelp.INSTANCE.getSpecific());
+                case "botinfo" -> stringBuilder.append(ForBotinfo.INSTANCE.getSpecific());
+                case "ping" -> stringBuilder.append(ForPing.INSTANCE.getSpecific());
+                case "say" -> stringBuilder.append(ForSay.INSTANCE.getSpecific());
+                case "timezones" -> stringBuilder.append(ForTimezones.INSTANCE.getSpecific());
                 // TODO: add convert help?
-                case "convert" -> stringBuilder.append(convert.getSpecific());
+                case "convert" -> stringBuilder.append(ForConvert.INSTANCE.getSpecific());
                 default -> {
                     return false;
                 }
@@ -75,6 +73,8 @@ public class Help implements CommandExecutor {
 
     public static class ForHelp implements Text<Help> {
 
+        public static ForHelp INSTANCE = new ForHelp();
+
         @Override
         public @NotNull Class<Help> getExecutor() {
             return Help.class;
@@ -99,6 +99,8 @@ public class Help implements CommandExecutor {
     }
 
     public static class ForBotinfo implements Text<Botinfo> {
+
+        public static ForBotinfo INSTANCE = new ForBotinfo();
 
         @Override
         public @NotNull Class<Botinfo> getExecutor() {
@@ -127,6 +129,8 @@ public class Help implements CommandExecutor {
 
     public static class ForPing implements Text<Ping> {
 
+        public static ForPing INSTANCE = new ForPing();
+
         @Override
         public @NotNull Class<Ping> getExecutor() {
             return Ping.class;
@@ -149,6 +153,8 @@ public class Help implements CommandExecutor {
     }
 
     public static class ForSay implements Text<Say> {
+
+        public static ForSay INSTANCE = new ForSay();
 
         @Override
         public @NotNull Class<Say> getExecutor() {
@@ -174,6 +180,8 @@ public class Help implements CommandExecutor {
     }
 
     public static class ForTimezones implements Text<Timezones> {
+
+        public static ForTimezones INSTANCE = new ForTimezones();
 
         @Override
         public @NotNull Class<Timezones> getExecutor() {
@@ -208,6 +216,8 @@ public class Help implements CommandExecutor {
     }
 
     public static class ForConvert implements Text<Convert> {
+
+        public static ForConvert INSTANCE = new ForConvert();
 
         @Override
         public @NotNull Class<Convert> getExecutor() {

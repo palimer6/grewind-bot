@@ -2,9 +2,14 @@ package net.grewind.palimer.bot.commands;
 
 import net.dv8tion.jda.api.entities.Message;
 
-public class Convert implements CommandExecutor {
+public class Convert extends CommandExecutor {
+
+    protected Convert(Message message, Command command) {
+        super(message, command);
+    }
+
     @Override
-    public boolean execute(Message message, Command command) {
+    public boolean execute() {
         return false;
     }
 }

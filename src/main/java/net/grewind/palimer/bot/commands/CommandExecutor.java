@@ -2,14 +2,14 @@ package net.grewind.palimer.bot.commands;
 
 import net.dv8tion.jda.api.entities.Message;
 
-import java.util.function.BiPredicate;
+public abstract class CommandExecutor {
+    protected Message message;
+    protected Command command;
 
-@FunctionalInterface
-interface CommandExecutor extends BiPredicate<Message, Command> {
-    @Override
-    default boolean test(Message message, Command command) {
-        return execute(message, command);
+    protected CommandExecutor(Message message, Command command) {
+        this.message = message;
+        this.command = command;
     }
 
-    boolean execute(Message message, Command command);
+    public abstract boolean execute();
 }
