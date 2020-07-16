@@ -20,6 +20,7 @@ dependencies {
     implementation 'net.dv8tion:JDA:4.2.0_168'
     implementation 'org.jetbrains:annotations:19.0.0'
     implementation 'org.jscience:jscience:4.3.1'
+    implementation 'com.google.code.gson:gson:2.8.6'
     testImplementation 'junit:junit:4.13'
     testImplementation 'org.mockito:mockito-core:3.3.3'
     testImplementation 'org.hamcrest:hamcrest-all:1.3'
