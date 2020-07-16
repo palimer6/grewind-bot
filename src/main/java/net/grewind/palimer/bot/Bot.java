@@ -4,6 +4,7 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.ReadyEvent;
+import net.dv8tion.jda.api.events.ShutdownEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -18,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nonnull;
 import javax.security.auth.login.LoginException;
 import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 public class Bot {
@@ -27,6 +29,7 @@ public class Bot {
     private static final long LOG_DELAY = TimeUnit.MILLISECONDS.toMillis(0);
     private static final long LOG_PERIOD = TimeUnit.HOURS.toMillis(1);
     private static Timer logTimer = null;
+    private static TimerTask timerTask = new LogTimerTask();
 
     public static void main(String[] args) {
         @SuppressWarnings("RedundantCast")
@@ -55,27 +58,35 @@ public class Bot {
 
         @Override
         public void onMessageReceived(@NotNull MessageReceivedEvent event) {
-            if (!isCommand(event.getMessage())) {
+            Message message = event.getMessage();
+            if (!isCommand(message)) {
                 return;
             }
-            if (isAuthorBot(event.getMessage())) {
+            if (isAuthorBot(message)) {
                 return;
             }
-            Command command = new Command(event.getMessage().getContentRaw());
-            if (!CommandVisitor.visit(event.getMessage(), command).execute()) {
+            Command command = new Command(message.getContentRaw());
+            if (!CommandVisitor.visit(message, command).execute()) {
                 //noinspection ResultOfMethodCallIgnored
-                CommandVisitor.visit(event.getMessage(),
+                CommandVisitor.visit(message,
                         new Command(String.format("%s%s %s", Command.SOIL, Help.ROOT, command.getRoot()))).execute();
             }
-            if(logTimer == null){
-                MESSAGE_LIST_HANDLER.syncedFunction(event.getMessage(),
+            if (logTimer == null) {
+                MESSAGE_LIST_HANDLER.syncedFunction(message,
                         MESSAGE_LIST_HANDLER.MESSAGE_LIST::add);
                 logTimer = new Timer();
-                logTimer.schedule(new LogTimerTask(), LOG_DELAY, LOG_PERIOD);
+                logTimer.schedule(timerTask, LOG_DELAY, LOG_PERIOD);
             } else {
-                new Thread(()->MESSAGE_LIST_HANDLER.syncedFunction(event.getMessage(),
+                new Thread(() -> MESSAGE_LIST_HANDLER.syncedFunction(message,
                         MESSAGE_LIST_HANDLER.MESSAGE_LIST::add)).start();
             }
+        }
+
+        @Override
+        public void onShutdown(@Nonnull ShutdownEvent event) {
+            timerTask.run();
+            timerTask.cancel();
+            logTimer.cancel();
         }
 
         private boolean isAuthorBot(@NotNull Message message) {

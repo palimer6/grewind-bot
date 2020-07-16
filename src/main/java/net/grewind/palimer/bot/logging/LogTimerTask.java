@@ -1,18 +1,37 @@
 package net.grewind.palimer.bot.logging;
 
 import com.google.gson.*;
-import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.internal.entities.ReceivedMessage;
 import net.grewind.palimer.bot.Bot;
+import net.grewind.palimer.bot.logging.serializers.*;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.OffsetDateTime;
 import java.util.TimerTask;
 
 public class LogTimerTask extends TimerTask {
     public static final String THREAD_NAME = "log_timer_task";
     private static final Path LOG_PATH = Paths.get(System.getProperty("user.dir") + "\\grewindBotLogs\\log.json");
+    private static final Gson GSON =
+            new GsonBuilder()
+                    .serializeNulls()
+                    .setPrettyPrinting()
+                    .registerTypeHierarchyAdapter(Enum.class, new EnumSerializers.Simple())
+                    .registerTypeHierarchyAdapter(OffsetDateTime.class, new OffsetDateTimeSerializers.Simple())
+                    .registerTypeHierarchyAdapter(ISnowflake.class, new SnowflakeSerializers.Simple())
+                    .registerTypeHierarchyAdapter(IMentionable.class, new MentionableSerializers.Full())
+                    .registerTypeHierarchyAdapter(IFakeable.class, new FakeableSerializers.Full())
+                    .registerTypeHierarchyAdapter(ChannelType.class, new ChannelTypeSerializers.Simple())
+                    .registerTypeHierarchyAdapter(User.class, new UserSerializers.Simple())
+                    .registerTypeHierarchyAdapter(MessageChannel.class, new MessageChannelSerializers.Simple())
+                    .registerTypeHierarchyAdapter(Guild.class, new GuildSerializers.Simple())
+                    .registerTypeHierarchyAdapter(Message.class, new MessageSerializers.Simple())
+                    .registerTypeHierarchyAdapter(ReceivedMessage.class, new MessageSerializers.Simple())
+                    .create();
 
     @Override
     public void run() {
@@ -20,10 +39,6 @@ public class LogTimerTask extends TimerTask {
             @Override
             public void run() {
                 Bot.MESSAGE_LIST_HANDLER.syncedRunnable(() -> {
-                    Gson gson = new GsonBuilder()
-                            .serializeNulls()
-                            .setPrettyPrinting()
-                            .create();
                     String oldLogsRaw;
                     JsonArray logsJson;
                     if (Files.notExists(LOG_PATH)) {
@@ -53,13 +68,14 @@ public class LogTimerTask extends TimerTask {
                         return;
                     }
                     try {
-                        logsJson = gson.fromJson(oldLogsRaw, JsonArray.class);
+                        logsJson = GSON.fromJson(oldLogsRaw, JsonArray.class);
                     } catch (JsonParseException e) {
                         e.printStackTrace();
                         return;
                     }
                     for (Message message : Bot.MESSAGE_LIST_HANDLER.MESSAGE_LIST) {
-                        JsonElement jsonTree = gson.toJsonTree(message);
+                        JsonObject jsonObject = GSON.fromJson(GSON.toJson(message), JsonObject.class);
+                        JsonElement jsonTree = GSON.toJsonTree(message);
                         logsJson.add(jsonTree);
                     }
                     try {
@@ -75,7 +91,7 @@ public class LogTimerTask extends TimerTask {
                         return;
                     }
                     try {
-                        Files.writeString(LOG_PATH, gson.toJson(logsJson));
+                        Files.writeString(LOG_PATH, GSON.toJson(logsJson));
                     } catch (IOException e) {
                         e.printStackTrace();
                         return;
