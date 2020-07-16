@@ -94,7 +94,7 @@ public class Help extends CommandExecutor {
 
         @Override
         public @NotNull String getVerbose() {
-            return "\tYou may also write the root of a command after it to get more help for that command.\n" +
+            return "\tYou may write the root of a command after it to get more help for that command.\n" +
                     "\t\t(e.g. \"!help ping\" for !ping)\n";
         }
     }
