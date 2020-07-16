@@ -20,17 +20,17 @@ public class LogTimerTask extends TimerTask {
                     .serializeNulls()
                     .setPrettyPrinting()
                     .registerTypeHierarchyAdapter(Enum.class,
-                            new EnumSerializers().getFullSerializer())
+                            new EnumSerializers().getSimpleSerializer())
                     .registerTypeHierarchyAdapter(OffsetDateTime.class,
                             new OffsetDateTimeSerializers().getSimpleSerializer())
                     .registerTypeHierarchyAdapter(ISnowflake.class,
-                            new SnowflakeSerializers().getFullSerializer())
+                            new SnowflakeSerializers().getSimpleSerializer())
                     .registerTypeHierarchyAdapter(IMentionable.class,
-                            new MentionableSerializers().getFullSerializer())
+                            new MentionableSerializers().getSimpleSerializer())
                     .registerTypeHierarchyAdapter(IFakeable.class,
                             new FakeableSerializers().getFullSerializer())
                     .registerTypeHierarchyAdapter(ChannelType.class,
-                            new ChannelTypeSerializers().getFullSerializer())
+                            new ChannelTypeSerializers().getSimpleSerializer())
                     .registerTypeHierarchyAdapter(User.class,
                             new UserSerializers().getSimpleSerializer())
                     .registerTypeHierarchyAdapter(MessageChannel.class,
