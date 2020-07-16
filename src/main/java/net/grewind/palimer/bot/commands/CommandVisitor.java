@@ -18,6 +18,7 @@ public class CommandVisitor {
             case Ping.ROOT -> new Ping(message, command);
             case Say.ROOT -> new Say(message, command);
             case Timezones.ROOT -> new Timezones(message, command);
+            case Shutdown.ROOT -> new Shutdown(message, command);
             case Help.ROOT -> new Help(message, command);
             default -> new Help(message, command);
         };
