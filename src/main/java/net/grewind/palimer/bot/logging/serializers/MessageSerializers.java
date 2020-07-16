@@ -8,8 +8,19 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Type;
 
-public class MessageSerializers {
-    public static class Simple implements JsonSerializer<Message> {
+public class MessageSerializers implements Serializers<Message> {
+    @Override
+    public Serializers.Simple<Message> getSimpleSerializer() {
+        return new Simple();
+    }
+
+    @Deprecated
+    @Override
+    public Serializers.Full<Message> getFullSerializer() {
+        throw new UnsupportedOperationException();
+    }
+
+    private static class Simple implements Serializers.Simple<Message> {
         @Override
         public JsonElement serialize(@NotNull Message message, Type typeOfSrc, @NotNull JsonSerializationContext context) {
             JsonObject jsonMessage = new JsonObject();

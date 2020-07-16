@@ -3,15 +3,24 @@ package net.grewind.palimer.bot.logging.serializers;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.grewind.palimer.bot.utils.Serial;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Type;
 
-public class ChannelTypeSerializers {
-    public static class Simple implements JsonSerializer<ChannelType> {
+public class ChannelTypeSerializers implements Serializers<ChannelType> {
+    @Override
+    public Serializers.Simple<ChannelType> getSimpleSerializer() {
+        return new Simple();
+    }
+
+    @Override
+    public Serializers.Full<ChannelType> getFullSerializer() {
+        return new Full();
+    }
+
+    private static class Simple implements Serializers.Simple<ChannelType> {
         @Override
         public JsonElement serialize(@NotNull ChannelType channelType, Type typeOfSrc, JsonSerializationContext context) {
             JsonObject jsonChannelType = new JsonObject();
@@ -21,7 +30,7 @@ public class ChannelTypeSerializers {
         }
     }
 
-    public static class Full implements JsonSerializer<ChannelType> {
+    private static class Full implements Serializers.Full<ChannelType> {
         @Override
         public JsonElement serialize(@NotNull ChannelType channelType, Type typeOfSrc, JsonSerializationContext context) {
             JsonObject jsonChannelType = new JsonObject();

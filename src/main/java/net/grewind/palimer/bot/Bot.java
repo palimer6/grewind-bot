@@ -29,7 +29,7 @@ public class Bot {
     private static final long LOG_DELAY = TimeUnit.MILLISECONDS.toMillis(0);
     private static final long LOG_PERIOD = TimeUnit.HOURS.toMillis(1);
     private static Timer logTimer = null;
-    private static TimerTask timerTask = new LogTimerTask();
+    private static final TimerTask timerTask = new LogTimerTask();
 
     public static void main(String[] args) {
         @SuppressWarnings("RedundantCast")
@@ -84,9 +84,9 @@ public class Bot {
 
         @Override
         public void onShutdown(@Nonnull ShutdownEvent event) {
-            timerTask.run();
             timerTask.cancel();
             logTimer.cancel();
+            timerTask.run();
         }
 
         private boolean isAuthorBot(@NotNull Message message) {

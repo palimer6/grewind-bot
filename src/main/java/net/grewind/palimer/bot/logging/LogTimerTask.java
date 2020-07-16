@@ -2,7 +2,6 @@ package net.grewind.palimer.bot.logging;
 
 import com.google.gson.*;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.internal.entities.ReceivedMessage;
 import net.grewind.palimer.bot.Bot;
 import net.grewind.palimer.bot.logging.serializers.*;
 
@@ -20,17 +19,26 @@ public class LogTimerTask extends TimerTask {
             new GsonBuilder()
                     .serializeNulls()
                     .setPrettyPrinting()
-                    .registerTypeHierarchyAdapter(Enum.class, new EnumSerializers.Simple())
-                    .registerTypeHierarchyAdapter(OffsetDateTime.class, new OffsetDateTimeSerializers.Simple())
-                    .registerTypeHierarchyAdapter(ISnowflake.class, new SnowflakeSerializers.Simple())
-                    .registerTypeHierarchyAdapter(IMentionable.class, new MentionableSerializers.Full())
-                    .registerTypeHierarchyAdapter(IFakeable.class, new FakeableSerializers.Full())
-                    .registerTypeHierarchyAdapter(ChannelType.class, new ChannelTypeSerializers.Simple())
-                    .registerTypeHierarchyAdapter(User.class, new UserSerializers.Simple())
-                    .registerTypeHierarchyAdapter(MessageChannel.class, new MessageChannelSerializers.Simple())
-                    .registerTypeHierarchyAdapter(Guild.class, new GuildSerializers.Simple())
-                    .registerTypeHierarchyAdapter(Message.class, new MessageSerializers.Simple())
-                    .registerTypeHierarchyAdapter(ReceivedMessage.class, new MessageSerializers.Simple())
+                    .registerTypeHierarchyAdapter(Enum.class,
+                            new EnumSerializers().getFullSerializer())
+                    .registerTypeHierarchyAdapter(OffsetDateTime.class,
+                            new OffsetDateTimeSerializers().getSimpleSerializer())
+                    .registerTypeHierarchyAdapter(ISnowflake.class,
+                            new SnowflakeSerializers().getFullSerializer())
+                    .registerTypeHierarchyAdapter(IMentionable.class,
+                            new MentionableSerializers().getFullSerializer())
+                    .registerTypeHierarchyAdapter(IFakeable.class,
+                            new FakeableSerializers().getFullSerializer())
+                    .registerTypeHierarchyAdapter(ChannelType.class,
+                            new ChannelTypeSerializers().getFullSerializer())
+                    .registerTypeHierarchyAdapter(User.class,
+                            new UserSerializers().getSimpleSerializer())
+                    .registerTypeHierarchyAdapter(MessageChannel.class,
+                            new MessageChannelSerializers().getSimpleSerializer())
+                    .registerTypeHierarchyAdapter(Guild.class,
+                            new GuildSerializers().getSimpleSerializer())
+                    .registerTypeHierarchyAdapter(Message.class,
+                            new MessageSerializers().getSimpleSerializer())
                     .create();
 
     @Override
@@ -74,7 +82,6 @@ public class LogTimerTask extends TimerTask {
                         return;
                     }
                     for (Message message : Bot.MESSAGE_LIST_HANDLER.MESSAGE_LIST) {
-                        JsonObject jsonObject = GSON.fromJson(GSON.toJson(message), JsonObject.class);
                         JsonElement jsonTree = GSON.toJsonTree(message);
                         logsJson.add(jsonTree);
                     }
