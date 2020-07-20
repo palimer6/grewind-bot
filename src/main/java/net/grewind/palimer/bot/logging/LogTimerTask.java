@@ -104,6 +104,7 @@ public class LogTimerTask extends TimerTask {
                         return;
                     }
                     Bot.MESSAGE_LIST_HANDLER.MESSAGE_LIST.clear();
+                    System.out.printf("logs written to %s%n", LOG_PATH);
                 });
             }
         };
