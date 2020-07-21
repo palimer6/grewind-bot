@@ -49,6 +49,9 @@ public class LogTimerTask extends TimerTask {
                 Bot.MESSAGE_LIST_HANDLER.syncedRunnable(() -> {
                     String oldLogsRaw;
                     JsonArray logsJson;
+                    if (Bot.MESSAGE_LIST_HANDLER.MESSAGE_LIST.isEmpty()) {
+                        return;
+                    }
                     if (Files.notExists(LOG_PATH)) {
                         try {
                             Files.createDirectories(LOG_PATH.getParent());
