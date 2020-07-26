@@ -1,8 +1,8 @@
 package net.grewind.palimer.bot.commands;
 
 import net.dv8tion.jda.api.entities.Message;
-import net.grewind.palimer.bot.sensitiveinfo.SecretStuff;
 import net.grewind.palimer.bot.utils.Sender;
+import net.grewind.palimer.bot.utils.UserUtils;
 
 public class Shutdown extends CommandExecutor {
     public static final String ROOT = "shutdown";
@@ -13,7 +13,7 @@ public class Shutdown extends CommandExecutor {
 
     @Override
     public boolean execute() {
-        if (message.getAuthor().getIdLong() == SecretStuff.CREATOR_ID) {
+        if (UserUtils.isBotAdmin(message.getAuthor())) {
             Sender.sendMessage(message.getChannel(), "Ok, bye!",
                     s -> message.getChannel().sendMessage(s));
             message.getJDA().shutdown();
