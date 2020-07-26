@@ -38,6 +38,8 @@ public class Bot {
             Activity.of(Activity.ActivityType.DEFAULT, "around with the code");
     private static final OnlineStatus RELEASE_STATUS = OnlineStatus.ONLINE;
     private static final OnlineStatus DEBUG_STATUS = OnlineStatus.DO_NOT_DISTURB;
+
+    //TODO: disable debug
     private static final boolean IS_DEBUG = true;
     private static final boolean IS_LOGGING = false;
 
