@@ -47,6 +47,10 @@ public class Command {
         return branches;
     }
 
+    public String getBranch(int index) {
+        return branches[index];
+    }
+
     /**
      * The Root of a {@link Command}.
      * <p>
@@ -86,5 +90,9 @@ public class Command {
         }
         System.arraycopy(branches, 1, crownBranches, 0, crownBranches.length);
         return crownBranches;
+    }
+
+    public String getCrownBranch(int index) {
+        return getCrownBranches()[index];
     }
 }

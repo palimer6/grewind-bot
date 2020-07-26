@@ -25,9 +25,9 @@ public class Timezones extends CommandExecutor {
         if (modifierCount < 2) {
             return false;
         }
-        String fromZone = command.getCrownBranches()[0];
+        String fromZone = command.getCrownBranch(0);
         int time;
-        Matcher matcher = Pattern.compile("(-?\\d+)([PpAa])?[Mm]?").matcher(command.getCrownBranches()[1]);
+        Matcher matcher = Pattern.compile("(-?\\d+)([PpAa])?[Mm]?").matcher(command.getCrownBranch(1));
         if (matcher.find()) {
             time = Integer.parseInt(matcher.group(1));
             if (matcher.group(2) != null) {
@@ -50,7 +50,7 @@ public class Timezones extends CommandExecutor {
             return false;
         }
         if (modifierCount > 2) {
-            String toZone = command.getCrownBranches()[2];
+            String toZone = command.getCrownBranch(2);
             int toUtcOffset = Integer.MAX_VALUE;
             for (Map.Entry<String, Integer> zone : ZONES_MAP) {
                 if (toZone.matches(zone.getKey())) {

@@ -30,9 +30,9 @@ public class Convert extends CommandExecutor {
             return false;
         }
         UnitFormat format = UnitFormat.getUCUMInstance();
-        String fromStr = command.getCrownBranches()[0];
-        String toStr = command.getCrownBranches()[1];
-        String valStr = command.getCrownBranches()[2];
+        String fromStr = command.getCrownBranch(0);
+        String toStr = command.getCrownBranch(1);
+        String valStr = command.getCrownBranch(2);
         Unit<?> from;
         Unit<?> to;
         UnitConverter converter;

@@ -29,7 +29,7 @@ public class Help extends CommandExecutor {
             stringBuilder.append(ForTimezones.INSTANCE.getGeneral());
             stringBuilder.append(ForConvert.INSTANCE.getGeneral());
         } else {
-            switch (this.command.getCrownBranches()[0]) {
+            switch (this.command.getCrownBranch(0)) {
                 case Help.ROOT -> stringBuilder.append(ForHelp.INSTANCE.getSpecific());
                 case Botinfo.ROOT -> stringBuilder.append(ForBotinfo.INSTANCE.getSpecific());
                 case Ping.ROOT -> stringBuilder.append(ForPing.INSTANCE.getSpecific());
