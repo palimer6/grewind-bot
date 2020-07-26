@@ -4,17 +4,17 @@ import com.google.gson.*;
 import net.dv8tion.jda.api.entities.*;
 import net.grewind.palimer.bot.Bot;
 import net.grewind.palimer.bot.logging.serializers.*;
+import net.grewind.palimer.bot.utils.FilePaths;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.OffsetDateTime;
 import java.util.TimerTask;
 
 public class LogTimerTask extends TimerTask {
     public static final String THREAD_NAME = "log_timer_task";
-    private static final Path LOG_PATH = Paths.get(System.getProperty("user.dir") + "\\grewindBotLogs\\log.json");
+    private static final Path LOG_PATH = FilePaths.LOG_DIR_PATH.resolve("log.json");
     private static final Gson GSON =
             new GsonBuilder()
                     .serializeNulls()

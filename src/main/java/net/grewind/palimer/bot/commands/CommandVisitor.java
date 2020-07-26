@@ -19,6 +19,7 @@ public class CommandVisitor {
             case Say.ROOT -> new Say(message, command);
             case Timezones.ROOT -> new Timezones(message, command);
             case Shutdown.ROOT -> new Shutdown(message, command);
+            case Config.ROOT -> new Config(message, command);
             case Help.ROOT -> new Help(message, command);
             default -> new Help(message, command);
         };

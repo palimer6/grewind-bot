@@ -99,9 +99,9 @@ public class Bot {
 
         @Override
         public void onShutdown(@Nonnull ShutdownEvent event) {
-            TIMER_TASK.cancel();
-            logTimer.cancel();
             if (IS_LOGGING) {
+                TIMER_TASK.cancel();
+                logTimer.cancel();
                 TIMER_TASK.run();
             }
         }
