@@ -1,6 +1,7 @@
 package net.grewind.palimer.bot;
 
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.ReadyEvent;
@@ -29,14 +30,23 @@ public class Bot {
     private static final long LOG_DELAY = TimeUnit.MILLISECONDS.toMillis(0);
     private static final long LOG_PERIOD = TimeUnit.HOURS.toMillis(1);
     private static Timer logTimer = null;
-    private static final TimerTask timerTask = new LogTimerTask();
+    private static final TimerTask TIMER_TASK = new LogTimerTask();
+    private static final Activity RELEASE_ACTIVITY =
+            Activity.of(Activity.ActivityType.DEFAULT,
+                    String.format("type %s%s for commands", Command.SOIL, Help.ROOT));
+    private static final Activity DEBUG_ACTIVITY =
+            Activity.of(Activity.ActivityType.DEFAULT, "around with the code");
+    private static final OnlineStatus RELEASE_STATUS = OnlineStatus.ONLINE;
+    private static final OnlineStatus DEBUG_STATUS = OnlineStatus.DO_NOT_DISTURB;
+    private static final boolean IS_DEBUG = true;
+    private static final boolean IS_LOGGING = false;
 
     public static void main(String[] args) {
         @SuppressWarnings("RedundantCast")
         JDABuilder jdaBuilder = JDABuilder.create((String) SecretStuff.TOKEN,
                 GatewayIntent.GUILD_MESSAGES, GatewayIntent.DIRECT_MESSAGES)
-                .setActivity(Activity.of(Activity.ActivityType.DEFAULT,
-                        String.format("type %s%s for commands", Command.SOIL, Help.ROOT)))
+                .setActivity(IS_DEBUG ? DEBUG_ACTIVITY : RELEASE_ACTIVITY)
+                .setStatus(IS_DEBUG ? DEBUG_STATUS : RELEASE_STATUS)
                 .addEventListeners(new Bot.Listeners());
         try {
             jdaBuilder.build();
@@ -54,6 +64,9 @@ public class Bot {
         public void onReady(@Nonnull ReadyEvent event) {
             startDate = System.currentTimeMillis();
             botId = event.getJDA().getSelfUser().getIdLong();
+            if (IS_DEBUG) {
+                System.out.println("Bot is now ready.");
+            }
         }
 
         @Override
@@ -71,22 +84,26 @@ public class Bot {
                 CommandVisitor.visit(message,
                         new Command(String.format("%s%s %s", Command.SOIL, Help.ROOT, command.getRoot()))).execute();
             }
-            if (logTimer == null) {
-                MESSAGE_LIST_HANDLER.syncedFunction(message,
-                        MESSAGE_LIST_HANDLER.MESSAGE_LIST::add);
-                logTimer = new Timer();
-                logTimer.schedule(timerTask, LOG_DELAY, LOG_PERIOD);
-            } else {
-                new Thread(() -> MESSAGE_LIST_HANDLER.syncedFunction(message,
-                        MESSAGE_LIST_HANDLER.MESSAGE_LIST::add)).start();
+            if (IS_LOGGING) {
+                if (logTimer == null) {
+                    MESSAGE_LIST_HANDLER.syncedFunction(message,
+                            MESSAGE_LIST_HANDLER.MESSAGE_LIST::add);
+                    logTimer = new Timer();
+                    logTimer.schedule(TIMER_TASK, LOG_DELAY, LOG_PERIOD);
+                } else {
+                    new Thread(() -> MESSAGE_LIST_HANDLER.syncedFunction(message,
+                            MESSAGE_LIST_HANDLER.MESSAGE_LIST::add)).start();
+                }
             }
         }
 
         @Override
         public void onShutdown(@Nonnull ShutdownEvent event) {
-            timerTask.cancel();
+            TIMER_TASK.cancel();
             logTimer.cancel();
-            timerTask.run();
+            if (IS_LOGGING) {
+                TIMER_TASK.run();
+            }
         }
 
         private boolean isAuthorBot(@NotNull Message message) {
