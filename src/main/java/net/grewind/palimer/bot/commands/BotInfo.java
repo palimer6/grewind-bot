@@ -10,10 +10,10 @@ import java.awt.*;
 import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
 
-public class Botinfo extends CommandExecutor {
+public class BotInfo extends CommandExecutor {
     public static final String ROOT = "botinfo";
 
-    protected Botinfo(Message message, Command command) {
+    protected BotInfo(Message message, Command command) {
         super(message, command);
     }
 

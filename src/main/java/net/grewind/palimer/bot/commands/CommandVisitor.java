@@ -13,13 +13,14 @@ public class CommandVisitor {
                 message.getChannel(),
                 command.getTree());
         return switch (root) {
-            case Botinfo.ROOT -> new Botinfo(message, command);
+            case BotInfo.ROOT -> new BotInfo(message, command);
             case Convert.ROOT -> new Convert(message, command);
             case Ping.ROOT -> new Ping(message, command);
             case Say.ROOT -> new Say(message, command);
             case Timezones.ROOT -> new Timezones(message, command);
             case Shutdown.ROOT -> new Shutdown(message, command);
             case Config.ROOT -> new Config(message, command);
+            case ReactRoles.ROOT -> new ReactRoles(message, command);
             case Help.ROOT -> new Help(message, command);
             default -> new Help(message, command);
         };

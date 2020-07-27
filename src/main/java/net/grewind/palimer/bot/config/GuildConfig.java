@@ -91,8 +91,8 @@ public class GuildConfig {
             return jda.getRoleById(id);
         }
 
-        public GuildChannel getChannel(@NotNull JDA jda) {
-            return jda.getGuildChannelById(id);
+        public TextChannel getChannel(@NotNull JDA jda) {
+            return jda.getTextChannelById(id);
         }
 
         public Emote getEmote(@NotNull JDA jda) {

@@ -23,7 +23,7 @@ public class Help extends CommandExecutor {
         StringBuilder stringBuilder = new StringBuilder(PREEMPT);
         if (this.command.getCrownBranches().length == 0) {
             stringBuilder.append(ForHelp.INSTANCE.getGeneral());
-            stringBuilder.append(ForBotinfo.INSTANCE.getGeneral());
+            stringBuilder.append(ForBotInfo.INSTANCE.getGeneral());
             stringBuilder.append(ForPing.INSTANCE.getGeneral());
             stringBuilder.append(ForSay.INSTANCE.getGeneral());
             stringBuilder.append(ForTimezones.INSTANCE.getGeneral());
@@ -31,7 +31,7 @@ public class Help extends CommandExecutor {
         } else {
             switch (this.command.getCrownBranch(0)) {
                 case Help.ROOT -> stringBuilder.append(ForHelp.INSTANCE.getSpecific());
-                case Botinfo.ROOT -> stringBuilder.append(ForBotinfo.INSTANCE.getSpecific());
+                case BotInfo.ROOT -> stringBuilder.append(ForBotInfo.INSTANCE.getSpecific());
                 case Ping.ROOT -> stringBuilder.append(ForPing.INSTANCE.getSpecific());
                 case Say.ROOT -> stringBuilder.append(ForSay.INSTANCE.getSpecific());
                 case Timezones.ROOT -> stringBuilder.append(ForTimezones.INSTANCE.getSpecific());
@@ -99,13 +99,13 @@ public class Help extends CommandExecutor {
         }
     }
 
-    public static class ForBotinfo implements Text<Botinfo> {
+    public static class ForBotInfo implements Text<BotInfo> {
 
-        public static final ForBotinfo INSTANCE = new ForBotinfo();
+        public static final ForBotInfo INSTANCE = new ForBotInfo();
 
         @Override
-        public @NotNull Class<Botinfo> getExecutor() {
-            return Botinfo.class;
+        public @NotNull Class<BotInfo> getExecutor() {
+            return BotInfo.class;
         }
 
         @Override
