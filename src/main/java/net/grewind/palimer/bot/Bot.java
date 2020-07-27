@@ -3,7 +3,13 @@ package net.grewind.palimer.bot;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.ShutdownEvent;
+import net.dv8tion.jda.api.events.emote.EmoteRemovedEvent;
+import net.dv8tion.jda.api.events.emote.update.EmoteUpdateNameEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
+import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionRemoveEvent;
+import net.dv8tion.jda.api.events.role.RoleDeleteEvent;
+import net.dv8tion.jda.api.events.role.update.RoleUpdateNameEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.grewind.palimer.bot.commands.Command;
 import net.grewind.palimer.bot.commands.CommandVisitor;
@@ -70,6 +76,36 @@ public class Bot {
                             MESSAGE_LIST_HANDLER.MESSAGE_LIST::add)).start();
                 }
             }
+        }
+
+        @Override
+        public void onGuildMessageReactionAdd(@Nonnull GuildMessageReactionAddEvent event) {
+            super.onGuildMessageReactionAdd(event);
+        }
+
+        @Override
+        public void onGuildMessageReactionRemove(@Nonnull GuildMessageReactionRemoveEvent event) {
+            super.onGuildMessageReactionRemove(event);
+        }
+
+        @Override
+        public void onRoleUpdateName(@Nonnull RoleUpdateNameEvent event) {
+            super.onRoleUpdateName(event);
+        }
+
+        @Override
+        public void onRoleDelete(@Nonnull RoleDeleteEvent event) {
+            super.onRoleDelete(event);
+        }
+
+        @Override
+        public void onEmoteUpdateName(@Nonnull EmoteUpdateNameEvent event) {
+            super.onEmoteUpdateName(event);
+        }
+
+        @Override
+        public void onEmoteRemoved(@Nonnull EmoteRemovedEvent event) {
+            super.onEmoteRemoved(event);
         }
 
         @Override

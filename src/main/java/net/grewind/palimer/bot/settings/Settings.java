@@ -3,6 +3,15 @@ package net.grewind.palimer.bot.settings;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.events.ReadyEvent;
+import net.dv8tion.jda.api.events.ShutdownEvent;
+import net.dv8tion.jda.api.events.emote.EmoteRemovedEvent;
+import net.dv8tion.jda.api.events.emote.update.EmoteUpdateNameEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
+import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionRemoveEvent;
+import net.dv8tion.jda.api.events.role.RoleDeleteEvent;
+import net.dv8tion.jda.api.events.role.update.RoleUpdateNameEvent;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.grewind.palimer.bot.Bot;
 import net.grewind.palimer.bot.commands.Command;
@@ -12,11 +21,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.security.auth.login.LoginException;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.function.UnaryOperator;
-
-import static net.dv8tion.jda.api.requests.GatewayIntent.*;
 
 public class Settings {
     private static final boolean DEBUG = true;
@@ -55,10 +60,16 @@ public class Settings {
     }
 
     public static @NotNull Collection<GatewayIntent> getGatewayIntents() {
-        Set<GatewayIntent> intents = new HashSet<>();
-        intents.add(GUILD_MESSAGES);
-        intents.add(DIRECT_MESSAGES);
-        intents.add(GUILD_MESSAGE_REACTIONS);
-        return intents;
+        return GatewayIntent.fromEvents(
+                ReadyEvent.class,
+                MessageReceivedEvent.class,
+                GuildMessageReactionAddEvent.class,
+                GuildMessageReactionRemoveEvent.class,
+                RoleUpdateNameEvent.class,
+                RoleDeleteEvent.class,
+                EmoteUpdateNameEvent.class,
+                EmoteRemovedEvent.class,
+                ShutdownEvent.class
+        );
     }
 }
