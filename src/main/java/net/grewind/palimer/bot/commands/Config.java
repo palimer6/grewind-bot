@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.entities.Message;
 import net.grewind.palimer.bot.config.GuildConfig;
 import net.grewind.palimer.bot.utils.FilePaths;
 import net.grewind.palimer.bot.utils.MentionUtils;
+import net.grewind.palimer.bot.utils.Sender;
 import net.grewind.palimer.bot.utils.UserUtils;
 
 import java.io.FileNotFoundException;
@@ -154,6 +155,7 @@ public class Config extends CommandExecutor {
             e.printStackTrace();
             return false;
         }
+        Sender.sendMessage(message.getChannel(), "Ok, saved \uD83D\uDC4C", s -> message.getChannel().sendMessage(s));
         return true;
     }
 
