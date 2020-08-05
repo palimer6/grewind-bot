@@ -6,6 +6,10 @@ import org.jetbrains.annotations.NotNull;
 
 public class UserUtils {
     public static boolean isBotAdmin(@NotNull User user) {
-        return SecretStuff.BOT_ADMIN_IDS.contains(user.getIdLong());
+        return isBotAdmin(user.getIdLong());
+    }
+
+    public static boolean isBotAdmin(long userId) {
+        return SecretStuff.BOT_ADMID_IDS.contains(userId);
     }
 }
