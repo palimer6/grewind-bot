@@ -1,6 +1,8 @@
 package net.grewind.palimer.bot;
 
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageReaction;
+import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.ShutdownEvent;
 import net.dv8tion.jda.api.events.emote.EmoteRemovedEvent;
@@ -14,12 +16,17 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.grewind.palimer.bot.commands.Command;
 import net.grewind.palimer.bot.commands.CommandVisitor;
 import net.grewind.palimer.bot.commands.Help;
+import net.grewind.palimer.bot.commands.ReactRoles;
+import net.grewind.palimer.bot.config.ConfigLoader;
+import net.grewind.palimer.bot.config.RoleConfig;
 import net.grewind.palimer.bot.logging.ListHandler;
 import net.grewind.palimer.bot.logging.LogTimerTask;
 import net.grewind.palimer.bot.settings.Settings;
+import net.grewind.palimer.bot.utils.UserUtils;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
@@ -80,7 +87,42 @@ public class Bot {
 
         @Override
         public void onGuildMessageReactionAdd(@Nonnull GuildMessageReactionAddEvent event) {
-            super.onGuildMessageReactionAdd(event);
+            MyClass myClass = new MyClass(event.getReactionEmote());
+            if (ReactRoles.getMessageIds().contains(event.getMessageIdLong())) {
+                if (UserUtils.isBotAdmin(event.getUserIdLong())) {
+                    event.getChannel().retrieveMessageById(event.getMessageIdLong()).queue(myClass::action);
+                }
+            } else {
+                // TODO: check and apply roles from roles message
+            }
+        }
+
+        public static class MyClass {
+            private final MessageReaction.ReactionEmote reactionEmote;
+
+            private MyClass(MessageReaction.ReactionEmote reactionEmote) {
+                this.reactionEmote = reactionEmote;
+            }
+
+            private void action(Message message) {
+                RoleConfig.Association association = null;
+                List<Role> mentionedRoles = message.getMentionedRoles();
+                if (mentionedRoles.isEmpty()) {
+                    return;
+                }
+                if (reactionEmote.isEmoji()) {
+                    association = new RoleConfig.Association(reactionEmote.getEmoji(), mentionedRoles.get(0).getIdLong());
+                } else if (reactionEmote.isEmote()) {
+                    association = new RoleConfig.Association(reactionEmote.getEmote().getIdLong(), mentionedRoles.get(0).getIdLong());
+                } else {
+                    return;
+                }
+                RoleConfig roleConfig = ConfigLoader.loadRoleConfigByGuildId(message.getGuild().getIdLong());
+                if (roleConfig == null) {
+                    roleConfig = new RoleConfig(message.getGuild().getIdLong());
+                }
+                roleConfig.getAssociations().add(association);
+            }
         }
 
         @Override
