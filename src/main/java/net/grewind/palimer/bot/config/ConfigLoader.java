@@ -11,6 +11,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class ConfigLoader {
     private static final Path GUILD_CONFIG_PATH = FilePaths.CONFIG_DIR_PATH.resolve("guildConfig.json");
@@ -39,6 +40,21 @@ public class ConfigLoader {
         return guildConfigs;
     }
 
+    public static GuildConfig loadGuildConfigByGuildId(long guildId) {
+        Set<GuildConfig> guildConfigs = loadGuildConfig();
+        if (guildConfigs == null) {
+            return null;
+        }
+        guildConfigs = guildConfigs.stream().filter(r -> r.getGuildId() == guildId).collect(Collectors.toSet());
+        if (guildConfigs.size() == 1) {
+            return guildConfigs.iterator().next();
+        } else if (guildConfigs.isEmpty()) {
+            return null;
+        } else {
+            throw new IllegalStateException("There were multiple configs for guildId " + guildId);
+        }
+    }
+
     public static @Nullable Set<RoleConfig> loadRoleConfig() {
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(RoleConfig.class, new RoleConfig.Deserializer())
@@ -59,5 +75,20 @@ public class ConfigLoader {
             return null;
         }
         return roleConfigs;
+    }
+
+    public static RoleConfig loadRoleConfigByGuildId(long guildId) {
+        Set<RoleConfig> roleConfigs = loadRoleConfig();
+        if (roleConfigs == null) {
+            return null;
+        }
+        roleConfigs = roleConfigs.stream().filter(r -> r.getGuildId() == guildId).collect(Collectors.toSet());
+        if (roleConfigs.size() == 1) {
+            return roleConfigs.iterator().next();
+        } else if (roleConfigs.isEmpty()) {
+            return null;
+        } else {
+            throw new IllegalStateException("There were multiple configs for guildId " + guildId);
+        }
     }
 }
